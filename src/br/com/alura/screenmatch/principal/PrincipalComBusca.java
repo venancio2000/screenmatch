@@ -15,11 +15,15 @@ import java.util.Scanner;
 
 public class PrincipalComBusca {
     public static void main(String[] args) throws IOException, InterruptedException {
+
         Scanner leitura = new Scanner(System.in);
         System.out.println("Digite um filme para busca: ");
         var busca = leitura.nextLine();
 
         String endereco = "https://www.omdbapi.com/?t=" + busca + "&apikey=dd7ca28e";
+        try {
+
+
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(endereco))
@@ -34,11 +38,20 @@ public class PrincipalComBusca {
                 .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
                 .create();
 
-
         TituloOmdb meuTituloOmdb = gson.fromJson(json, TituloOmdb.class);
         System.out.println(meuTituloOmdb);
-        Titulo meuTitulo = new Titulo(meuTituloOmdb);
-        System.out.println("Titulo já convertido");
-        System.out.println(meuTitulo);
+
+            //try {
+            Titulo meuTitulo = new Titulo(meuTituloOmdb);
+            System.out.println("Titulo já convertido");
+            System.out.println(meuTitulo);
+        }catch (NumberFormatException e){
+            System.out.println("Aconteceu um erro");
+            System.out.println(e.getMessage());
+        }catch(IllegalArgumentException e){
+            System.out.println("Algum erro de argumento na busca verifique o endereco");
+        }
+
+
     }
 }
